@@ -28,7 +28,7 @@ RUN set -ex; \
 ENV FLINK_TGZ_URL=https://dlcdn.apache.org/flink/flink-2.2.0/flink-2.2.0-bin-scala_2.12.tgz \
     FLINK_ASC_URL=https://downloads.apache.org/flink/flink-2.2.0/flink-2.2.0-bin-scala_2.12.tgz.asc \
     GPG_KEY=7BC9FA3EBE7E3DC7CD0EA0454C09617EAF241D76 \
-    CHECK_GPG=true
+    CHECK_GPG=false
 
 # Prepare environment
 ENV FLINK_HOME=/opt/flink
@@ -36,10 +36,10 @@ ENV PATH=$FLINK_HOME/bin:$PATH
 RUN groupadd --system --gid=9999 flink && \
     useradd --system --home-dir $FLINK_HOME --uid=9999 --gid=flink flink
 WORKDIR $FLINK_HOME
+COPY flink-2.2.0-grepr-bin-scala_2.12.tgz flink.tgz
 
 # Install Flink
 RUN set -ex; \
-  wget -nv -O flink.tgz "$FLINK_TGZ_URL"; \
   \
   if [ "$CHECK_GPG" = "true" ]; then \
     wget -nv -O flink.tgz.asc "$FLINK_ASC_URL"; \
@@ -57,6 +57,7 @@ RUN set -ex; \
   \
   tar -xf flink.tgz --strip-components=1; \
   rm flink.tgz; \
+  find . -type f -name '._*' -delete; \
   \
   chown -R flink:flink .; \
   \
