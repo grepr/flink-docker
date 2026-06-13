@@ -36,7 +36,7 @@ ENV PATH=$FLINK_HOME/bin:$PATH
 RUN groupadd --system --gid=9999 flink && \
     useradd --system --home-dir $FLINK_HOME --uid=9999 --gid=flink flink
 WORKDIR $FLINK_HOME
-COPY flink-2.2.0-grepr-bin-scala_2.12.tgz flink.tgz
+COPY flink-2.2.1-grepr-bin-scala_2.12.tgz flink.tgz
 
 # Install Flink
 RUN set -ex; \
