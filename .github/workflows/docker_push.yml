@@ -53,16 +53,6 @@ jobs:
           - flink_version: "1.20"
             java_version: "17"
             dockerfile: "1.20/scala_2.12-java17-ubuntu/Dockerfile"
-          # Flink 2.0.x
-          - flink_version: "2.0"
-            java_version: "11"
-            dockerfile: "2.0/scala_2.12-java11-ubuntu/Dockerfile"
-          - flink_version: "2.0"
-            java_version: "17"
-            dockerfile: "2.0/scala_2.12-java17-ubuntu/Dockerfile"
-          - flink_version: "2.0"
-            java_version: "21"
-            dockerfile: "2.0/scala_2.12-java21-ubuntu/Dockerfile"
           # Flink 2.1.x
           - flink_version: "2.1"
             java_version: "11"
@@ -73,7 +63,7 @@ jobs:
           - flink_version: "2.1"
             java_version: "21"
             dockerfile: "2.1/scala_2.12-java21-ubuntu/Dockerfile"
-          # Flink 2.2.x (Latest)
+          # Flink 2.2.x
           - flink_version: "2.2"
             java_version: "11"
             dockerfile: "2.2/scala_2.12-java11-ubuntu/Dockerfile"
@@ -83,19 +73,29 @@ jobs:
           - flink_version: "2.2"
             java_version: "21"
             dockerfile: "2.2/scala_2.12-java21-ubuntu/Dockerfile"
+          # Flink 2.3.x (Latest)
+          - flink_version: "2.3"
+            java_version: "11"
+            dockerfile: "2.3/scala_2.12-java11-ubuntu/Dockerfile"
+          - flink_version: "2.3"
+            java_version: "17"
+            dockerfile: "2.3/scala_2.12-java17-ubuntu/Dockerfile"
+          - flink_version: "2.3"
+            java_version: "21"
+            dockerfile: "2.3/scala_2.12-java21-ubuntu/Dockerfile"
 
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@1f40c72289eff860ee54a304f1438e3cff362e0a
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -140,7 +140,7 @@ jobs:
           echo "Image tags: $TAGS"
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a
         with:
           context: ${{ matrix.flink_version }}/scala_2.12-java${{ matrix.java_version }}-ubuntu
           file: ${{ matrix.dockerfile }}
